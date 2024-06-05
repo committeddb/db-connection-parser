@@ -15,7 +15,7 @@ type Connection struct {
 	URL  string `yaml:"url"`
 }
 
-func Parse(r io.Reader) (map[string]*Connection, error) {
+func Parse(r io.Reader) (map[string]Datastore, error) {
 	bs, err := io.ReadAll(r)
 	if err != nil {
 		return nil, err
@@ -31,9 +31,9 @@ func Parse(r io.Reader) (map[string]*Connection, error) {
 		return nil, nil
 	}
 
-	cm := make(map[string]*Connection)
+	cm := make(map[string]Datastore)
 	for _, c := range d.Connections {
-		cm[c.Name] = c
+		cm[c.Name] = &NullDatastore{}
 	}
 
 	return cm, nil

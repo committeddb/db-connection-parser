@@ -11,15 +11,18 @@ import (
 func TestParse(t *testing.T) {
 	tests := map[string]struct {
 		input string
-		want  map[string]*parser.Connection
+		want  map[string]parser.Datastore
 	}{
-		"empty":  {input: "", want: nil},
-		"simple": {input: "datastores:\n  -\n    name: foo\n    url: bar", want: map[string]*parser.Connection{"foo": {Name: "foo", URL: "bar"}}},
+		"empty": {input: "", want: nil},
+		"simple": {
+			input: "datastores:\n  -\n    name: foo\n    url: bar",
+			want:  map[string]parser.Datastore{"foo": &parser.NullDatastore{}},
+		},
 		"two": {
 			input: "datastores:\n  -\n    name:   foo\n    url: bar\n  -\n    name: baz\n    url: qux\n",
-			want: map[string]*parser.Connection{
-				"foo": {Name: "foo", URL: "bar"},
-				"baz": {Name: "baz", URL: "qux"},
+			want: map[string]parser.Datastore{
+				"foo": &parser.NullDatastore{},
+				"baz": &parser.NullDatastore{},
 			},
 		},
 	}
